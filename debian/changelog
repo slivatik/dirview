@@ -1,0 +1,9 @@
+dirview (1.0.0-1) stable; urgency=medium
+
+  * Initial release
+  * Based on Qt dirview example
+  * Added hidden files display
+  * Added name filtering with QLineEdit
+  * Added folder size calculation button
+
+ -- Stepan <stepan@astra.local>  Sun, 15 Jun 2026 12:00:00 +0300

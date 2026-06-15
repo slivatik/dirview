@@ -1,0 +1,49 @@
+name: Build Debian Package
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pyqt5
+    
+    - name: Create package structure
+      run: |
+        mkdir -p dirview_pkg/DEBIAN
+        mkdir -p dirview_pkg/usr/bin
+        
+        cat > dirview_pkg/DEBIAN/control << 'EOF'
+        Package: dirview
+        Version: 1.0.0
+        Section: utils
+        Priority: optional
+        Architecture: all
+        Maintainer: Stepan <stepan@astra.local>
+        Depends: python3, python3-pyqt5
+        Description: File tree viewer with folder size calculation
+         Based on Qt's dirview example with added filtering.
+        EOF
+        
+        cp dirview.py dirview_pkg/usr/bin/dirview
+        chmod 755 dirview_pkg/usr/bin/dirview
+    
+    - name: Build .deb package
+      run: |
+        dpkg-deb --build dirview_pkg
+        mv dirview_pkg.deb dirview_1.0.0-1_all.deb
+    
+    - name: Upload .deb artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dirview-deb
+        path: dirview_*.deb

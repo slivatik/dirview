@@ -1,0 +1,8 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	mkdir -p debian/dirview/usr/bin
+	install -m 755 dirview.py debian/dirview/usr/bin/dirview
